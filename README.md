@@ -1,157 +1,93 @@
 # VortexLobe
  
-An open-source unscrew propeller built on Robert L. Read's *Gentle Propulsion* design. Instead of traditional flat blades, VortexLobe uses four curved hemispherical lobes on a spherical rotor to generate thrust in water and air.
+A 3D printed aquatic and aerial propulsion system built on the open-source Gentle Propulsion design by Robert L. Read of [Public Invention](https://pubinv.org). This project adds a motorized mount to make the unscrew propeller self-powered, and tests whether it generates measurable thrust in water and air.
  
-![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
-![Built with OpenSCAD](https://img.shields.io/badge/Built%20with-OpenSCAD-orange)
-![3D Printed](https://img.shields.io/badge/3D%20Printed-PLA-green)
- 
-> Built with full permission from **Robert L. Read** of [Public Invention](https://pubinv.org).
+This project was developed with the knowledge and permission of Robert L. Read.
  
 ---
  
-## About
+# Background
  
-VortexLobe is an alternative propulsion system that replaces traditional propeller blades with four curved hemispherical lobes attached to a spherical rotor. When the rotor spins, the lobes push fluid axially through a rotational unscrewing motion, generating forward thrust.
+The unscrew propeller was originally conceived by Robert L. Read in 2022 as an alternative to the traditional screw propeller. Rather than using flat angled blades, it uses four curved hemispherical lobes attached to a spherical rotor. When spun, the lobes push fluid axially through a rotational unscrewing motion, generating thrust without sharp edges.
  
-The curved lobe geometry is also potentially safer for aquatic life than a standard propeller, since organisms that come into contact with the rotor are less likely to be injured.
+The original design was tested in a hot tub using a battery-powered drill and a wooden shaft glued to a long drill bit. It appeared to move with moderate force on the first try. Robert's full writeup, experiment notes, and original OpenSCAD files are available at [github.com/PubInv/unscrew-propeller](https://github.com/PubInv/unscrew-propeller).
  
-This project tests whether the design generates measurable thrust in water and air, and how efficiency changes across different voltages.
- 
----
- 
-## Credits
- 
-This project is a direct extension of the **Gentle Propulsion** project by **Robert L. Read**:
- 
-| | |
-|---|---|
-| Original repo | [github.com/PubInv/unscrew-propeller](https://github.com/PubInv/unscrew-propeller) |
-| Original author | Robert L. Read, Public Invention |
-| Original license | AGPL v3 / CERN OHL-S v2 |
+The goal of VortexLobe is to take that original design and make it self-powered using a 6V DC motor and a fully 3D printed motor mount, then measure the thrust it produces at different voltages in both water and air.
  
 ---
  
-## What's Different
+# What I Changed
  
-| Feature | Gentle Propulsion (original) | VortexLobe |
-|---|---|---|
-| Rotor | Hemisphere with 4 lobes | Same (unchanged) |
-| Tail cone | Tapered cone | Same (unchanged) |
-| Motor mount | None — drill + wooden shaft | 3D printed mount |
-| Power source | Manual drill | 6V DC motor |
-| Direction | One direction | Forward + reverse |
+The rotor and tail cone are completely unchanged from Robert's original design. The only addition is a motor mount — a 3D printed hub that fits into the square portal hole of the rotor and grips the motor shaft, allowing the motor to drive the rotor without a drill or wooden shaft.
+ 
+This makes the design self-contained and repeatable, which is important for running controlled experiments.
  
 ---
  
-## File Structure
+# Files
  
-```
-VortexLobe/
-├── STL/
-│   ├── GentlePropulsionTop.stl         # Main rotor with 4 lobes
-│   ├── GentlePropulsionTail.stl        # Tail cone housing
-│   └── motor_mount_v4.stl              # Motor mount hub
-├── SCAD/
-│   ├── GentlePropulsion_MotorMount.scad
-│   └── motor_mount_v4.scad
-├── README.md
-└── LICENSE
-```
+The STL folder contains three files ready to print:
+ 
+- `GentlePropulsionTop.stl` — the original rotor, unchanged from Robert's design
+- `GentlePropulsionTail.stl` — the original tail cone, unchanged
+- `motor_mount_v4.stl` — a new motor mount hub designed for a standard 130-size 6V DC motor
+The SCAD folder contains the full OpenSCAD source for both the motor mount and the combined assembly file.
  
 ---
  
-## Parts List
+# Building It
  
-| Part | Source | Cost |
-|---|---|---|
-| 6V DC 130-size motor | Amazon | ~$3 |
-| 4×AA battery holder | Amazon | ~$2 |
-| DPDT toggle switch | Hardware store | ~$1 |
-| Hot glue + super glue | Hardware store | ~$5 |
-| PLA filament | — | — |
-| **Total** | | **~$11** |
+The total parts cost is around $11. You need a 6V DC 130-size motor (about $3 on Amazon), a 4×AA battery holder, some hot glue, and super glue. A DPDT toggle switch is optional but makes forward/reverse switching much cleaner.
+ 
+Print all three parts in PLA at 0.2mm layer height, 40% infill, 3 walls, no supports. The rotor takes about 2–3 hours. The tail cone is about 45 minutes. The motor mount is about 20 minutes.
+ 
+To assemble, push the motor mount up through the portal hole in the rotor and hot glue it in place. Slide the motor into the mount collar from below, shaft pointing up, and add a drop of super glue where the shaft meets the portal hole. Drop the full assembly into the tail cone and hot glue the collar against the inner cone wall to keep the motor from rotating. Wire the motor to the battery pack and swap the wires to reverse direction.
  
 ---
  
-## Print Settings
+# Experiment
  
-| Setting | Value |
-|---|---|
-| Material | PLA |
-| Layer height | 0.2mm |
-| Infill | 40% |
-| Walls | 3 |
-| Supports | None needed |
-| Orientation | Flat side down |
+The central question is whether this design generates measurable thrust, and how that thrust changes with voltage and fluid medium.
  
-| File | Estimated print time |
-|---|---|
-| GentlePropulsionTop | 2–3 hours |
-| GentlePropulsionTail | ~45 minutes |
-| motor_mount_v4 | ~20 minutes |
+I measured thrust by mounting the propeller on a kitchen scale facing down and recording the reading in grams at 3V, 4.5V, and 6V. I ran the same test in a bucket of water and in air. The independent variables are voltage and medium, the dependent variable is thrust in grams, and everything else (motor, rotor, distance, temperature) is held constant.
+ 
+Efficiency is calculated as thrust divided by power input (volts × amps), which gives grams per watt.
  
 ---
  
-## Assembly
+# Results
  
-**What you need**
-- All 3 printed parts
-- 6V DC motor
-- Hot glue gun and super glue
-- 4×AA battery pack
-**Step 1 — Attach motor mount to rotor**
-Push the motor mount up through the square portal hole on the flat base of the rotor until the square block sits flush with the surface. Hot glue around all edges where the block meets the rotor. Let cure fully before moving on.
- 
-**Step 2 — Insert motor into mount**
-Slide the motor into the round collar from below, shaft pointing up into the portal hole. Add a drop of super glue where the shaft tip meets the inside of the portal hole. This is what transfers spin from the shaft to the rotor — let it cure completely.
- 
-**Step 3 — Mount into tail cone**
-Drop the full assembly into the tail cone with the motor body hanging down inside. Hot glue around the collar where it contacts the cone inner wall to prevent the motor from rotating.
- 
-**Step 4 — Wire up**
-Connect the two motor wires to the 4×AA battery pack. Swap the wires to reverse direction.
- 
-**Step 5 — Test**
-Hold the tail cone firmly, connect power, and confirm the rotor spins cleanly. Test in a bucket of water with the tail pointing backward, then in air.
+*To be updated after testing.*
  
 ---
  
-## Experiment
+# Possible Issues
  
-**Hypothesis**
-A hemispherical lobe rotor will generate measurable thrust in both water and air, with thrust increasing as voltage increases.
+Reverse thrust does not work the same way as with a screw propeller. Robert noted this in his original README — unlike a screw, you cannot simply reverse the spin direction to go backward with equal force. This is worth investigating experimentally and is one of the more interesting open questions about the design.
  
-**Variables**
- 
-| Type | Variable |
-|---|---|
-| Independent | Voltage (3V, 4.5V, 6V) and medium (water vs air) |
-| Dependent | Thrust in grams |
-| Controlled | Motor, rotor, test distance, temperature |
- 
-**Method**
-1. Mount VortexLobe on a kitchen scale facing down
-2. Connect motor to a voltage source
-3. Record thrust in grams at 3V, 4.5V, and 6V
-4. Repeat in water and in air
-5. Calculate efficiency using `Thrust (g) / Power (W)`
----
- 
-## License
- 
-Licensed under the **GNU Affero General Public License v3.0 (AGPL v3)**, the same as the original Gentle Propulsion project.
- 
-See [LICENSE](LICENSE) or [gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html) for details.
+It is also possible, as Robert pointed out, that the thrust observed in a closed vessel like a hot tub could be an artifact of reflected currents. Testing in open water or a large pool would help eliminate that concern.
  
 ---
  
-## Acknowledgements
+# What's Next
  
-- **Robert L. Read** — original Gentle Propulsion design, open-source publication, and permission to build on this work
-- **Public Invention** — [pubinv.org](https://pubinv.org)
-- **HCC Fabrication & Innovation Lab** — 3D printing support
+Robert's May 2026 update suggests the most promising direction is a contra-rotating version, where the outer hemisphere shell and inner lobe assembly spin in opposite directions, driven by a geared bevel gear system from a single motor. This would cancel out the torque imparted to the fluid and potentially improve efficiency significantly. That is a future version of this project.
+ 
 ---
  
-*VortexLobe — Science Fair Project, 2026*
+# License
+ 
+The OpenSCAD code in this repository is licensed under the GNU Affero General Public License v3.0, the same as the original Gentle Propulsion code. The hardware designs are licensed under CERN OHL Strongly Reciprocal V2. This text is licensed under Creative Commons By Attribution.
+ 
+See [gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html) for the full license text.
+ 
+---
+ 
+# Acknowledgements
+ 
+Robert L. Read and Public Invention, for making the original Gentle Propulsion design open source and for giving permission to build on it.
+ 
+HCC Fabrication and Innovation Lab, for 3D printing support.
+ 
+---
  
