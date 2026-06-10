@@ -16,11 +16,13 @@ The goal of VortexLobe is to take that original design and make it self-powered 
  
 ---
  
-# What I Changed
+# My Contributions
  
-The rotor and tail cone are completely unchanged from Robert's original design. The only addition is a motor mount — a 3D printed hub that fits into the square portal hole of the rotor and grips the motor shaft, allowing the motor to drive the rotor without a drill or wooden shaft.
+Robert's original experiment used a cordless drill and a wooden shaft to spin the rotor — there was no way to run it independently without someone holding a drill. My goal was to make it a standalone motorized device that could run controlled, repeatable experiments without any hand-held tools.
  
-This makes the design self-contained and repeatable, which is important for running controlled experiments.
+To do this I designed a 3D printed motor mount from scratch in OpenSCAD. It has a round collar that grips the motor body and a square hub that keys directly into the rotor's portal hole, transferring the motor's spin to the rotor. This was the main engineering challenge of the project — the mount had to fit inside the tail cone, align the shaft precisely with the portal hole, and hold the motor from rotating under load, all within the tight geometry of the original design.
+ 
+I went through four iterations of the mount before getting the fit right, adjusting collar diameter, wall thickness, and block height each time based on test prints. The final version fits a standard 130-size 6V DC motor and allows the full assembly to be tested hands-free at different voltages.
  
 ---
  
@@ -90,4 +92,3 @@ Robert L. Read and Public Invention, for making the original Gentle Propulsion d
 HCC Fabrication and Innovation Lab, for 3D printing support.
  
 ---
- 
