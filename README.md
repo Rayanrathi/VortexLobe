@@ -30,8 +30,8 @@ I went through four iterations of the mount before getting the fit right, adjust
  
 The STL folder contains three files ready to print:
  
-- `GentlePropulsionTop.stl` — the original rotor, unchanged from Robert's design
-- `GentlePropulsionTail.stl` — the original tail cone, unchanged
+- `GentlePropulsionTop.stl` — the original rotor, 
+- `GentlePropulsionTail.stl` — the original tail cone, 
 - `motor_mount_v4.stl` — a new motor mount hub designed for a standard 130-size 6V DC motor
 The SCAD folder contains the full OpenSCAD source for both the motor mount and the combined assembly file.
  
