@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VortexLobe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg:        #0a0c10;
+    --surface:   #111318;
+    --border:    #1e2128;
+    --accent:    #00c2ff;
+    --accent2:   #0077aa;
+    --text:      #e8eaf0;
+    --muted:     #6b7280;
+    --dim:       #9ca3af;
+    --rotor:     #2196F3;
+    --mount:     #FF8C00;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 60px;
+    background: rgba(10,12,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 2.5rem; max-width: 1000px; margin: 0 auto; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  h1 { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; }
+  h2 { font-size: 1.9rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.2rem; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  p  { color: var(--dim); max-width: 640px; margin-bottom: 1rem; }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-title-line {
+    display: block;
+    color: var(--text);
+  }
+  .hero-title-line.accent { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--dim);
+    margin: 1.5rem 0 2rem;
+    max-width: 480px;
+    line-height: 1.8;
+  }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+  }
+  .hero-cta:hover { opacity: 0.85; }
+
+  .hero-cta-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: 4px;
+    margin-left: 1rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .hero-cta-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── SVG PROPELLER DIAGRAM ── */
+  .prop-diagram {
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.8rem;
+  }
+  .card h3 { color: var(--text); }
+  .card p  { font-size: 0.92rem; margin-bottom: 0; }
+
+  .card-accent { border-top: 2px solid var(--accent); }
+  .card-orange { border-top: 2px solid var(--mount); }
+
+  /* ── BUILD GUIDE ── */
+  .steps { margin-top: 2.5rem; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    align-items: start;
+  }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(0,194,255,0.08);
+    border: 1px solid rgba(0,194,255,0.2);
+    border-radius: 4px;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 { color: var(--text); font-size: 1rem; margin-bottom: 0.4rem; }
+  .step-content p  { font-size: 0.92rem; margin-bottom: 0; }
+
+  .warn-box {
+    background: rgba(255,140,0,0.07);
+    border: 1px solid rgba(255,140,0,0.25);
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    color: #FFB74D;
+    margin-top: 0.5rem;
+  }
+
+  /* ── EXPERIMENT ── */
+  .experiment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .var-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  .var-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 0;
+  }
+  .var-table td {
+    font-size: 0.9rem;
+    color: var(--dim);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .var-table td:first-child { color: var(--accent); font-weight: 500; padding-right: 1rem; white-space: nowrap; }
+
+  .hypothesis {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1.2rem 1.4rem;
+    font-size: 0.95rem;
+    color: var(--dim);
+    font-style: italic;
+    margin: 2rem 0;
+  }
+
+  .formula {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--accent);
+    background: rgba(0,194,255,0.06);
+    border: 1px solid rgba(0,194,255,0.15);
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+
+  /* ── FILES ── */
+  .file-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .file-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    transition: border-color 0.2s;
+  }
+  .file-row:hover { border-color: var(--accent2); }
+
+  .file-info { display: flex; align-items: center; gap: 1rem; }
+  .file-icon {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.3rem 0.5rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .stl  { background: rgba(33,150,243,0.15); color: #42A5F5; }
+  .scad { background: rgba(255,140,0,0.15);  color: #FFB74D; }
+  .md   { background: rgba(100,200,100,0.15); color: #81C784; }
+
+  .file-name { font-weight: 500; font-size: 0.92rem; }
+  .file-desc { font-size: 0.82rem; color: var(--muted); }
+
+  .dl-btn {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid rgba(0,194,255,0.3);
+    border-radius: 4px;
+    padding: 0.4rem 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+  }
+  .dl-btn:hover { background: rgba(0,194,255,0.08); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1000px; margin: 0 auto;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { gap: 1.2rem; }
+    section { padding: 4rem 1.2rem; }
+    .hero-grid, .about-grid, .experiment-grid { grid-template-columns: 1fr; }
+    .prop-diagram { max-width: 280px; margin: 2rem auto 0; }
+    h1 { font-size: 2.4rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#home">VortexLobe</a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#build">Build</a></li>
+    <li><a href="#experiment">Experiment</a></li>
+    <li><a href="#files">Files</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Science Fair Project — 2026</div>
+      <h1>
+        <span class="hero-title-line">A propeller</span>
+        <span class="hero-title-line">that unscrews</span>
+        <span class="hero-title-line accent">through water.</span>
+      </h1>
+      <p class="hero-sub">
+        VortexLobe replaces traditional flat blades with four curved hemispherical lobes.
+        Spin them and they push fluid axially — no sharp edges, no blade strikes.
+      </p>
+      <a class="hero-cta" href="#build">See how it's built</a>
+      <a class="hero-cta-ghost" href="#files">Download files</a>
+    </div>
+
+    <!-- Inline SVG propeller diagram -->
+    <svg class="prop-diagram" viewBox="0 0 360 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- tail cone -->
+      <path d="M 148 240 Q 140 340 180 380 Q 220 340 212 240 Z"
+            fill="#1565C0" opacity="0.85"/>
+      <!-- cone outline -->
+      <path d="M 148 240 Q 140 340 180 380 Q 220 340 212 240"
+            fill="none" stroke="#2196F3" stroke-width="1" opacity="0.6"/>
+
+      <!-- motor mount -->
+      <rect x="163" y="222" width="34" height="20" rx="3"
+            fill="#E65100" opacity="0.9"/>
+      <text x="180" y="235" text-anchor="middle"
+            fill="white" font-family="monospace" font-size="7" font-weight="bold">MOUNT</text>
+
+      <!-- motor shaft -->
+      <line x1="180" y1="210" x2="180" y2="222"
+            stroke="#aaa" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- rotor dome -->
+      <path d="M 80 210 A 100 100 0 0 1 280 210 Q 290 230 180 240 Q 70 230 80 210 Z"
+            fill="#1976D2" opacity="0.9"/>
+
+      <!-- 4 lobes on dome -->
+      <ellipse cx="120" cy="188" rx="28" ry="18"
+               fill="#42A5F5" opacity="0.95" transform="rotate(-25 120 188)"/>
+      <ellipse cx="240" cy="188" rx="28" ry="18"
+               fill="#42A5F5" opacity="0.95" transform="rotate(25 240 188)"/>
+      <ellipse cx="160" cy="170" rx="20" ry="28"
+               fill="#42A5F5" opacity="0.95"/>
+      <ellipse cx="200" cy="170" rx="20" ry="28"
+               fill="#64B5F6" opacity="0.8"/>
+
+      <!-- dome base ring -->
+      <ellipse cx="180" cy="238" rx="100" ry="10"
+               fill="none" stroke="#2196F3" stroke-width="1" opacity="0.4"/>
+
+      <!-- spin arrow -->
+      <path d="M 95 175 A 90 60 0 0 1 180 148"
+            fill="none" stroke="#00c2ff" stroke-width="1.5"
+            stroke-dasharray="5 3" marker-end="url(#arr)" opacity="0.7"/>
+
+      <!-- thrust arrow -->
+      <line x1="180" y1="135" x2="180" y2="95"
+            stroke="#00c2ff" stroke-width="2"
+            marker-end="url(#arr2)"/>
+      <text x="192" y="118" fill="#00c2ff"
+            font-family="monospace" font-size="9" font-weight="bold">THRUST</text>
+
+      <!-- labels -->
+      <text x="52" y="192" fill="#90CAF9" font-family="monospace" font-size="8">LOBE</text>
+      <text x="294" y="192" fill="#90CAF9" font-family="monospace" font-size="8">LOBE</text>
+      <text x="100" y="270" fill="#64B5F6" font-family="monospace" font-size="8">TAIL CONE</text>
+      <text x="205" y="232" fill="#FFB74D" font-family="monospace" font-size="7">MOUNT</text>
+
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#00c2ff" stroke-width="1.5"/>
+        </marker>
+        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#00c2ff" stroke-width="2"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="eyebrow">Background</div>
+  <h2>What is the unscrew propeller?</h2>
+  <p>
+    Traditional propellers use flat angled blades to push water backward and drive a vehicle forward.
+    The unscrew propeller, originally designed by Robert L. Read of Public Invention, replaces those blades
+    with four curved hemispherical lobes on a spherical rotor. When spun, the lobes push fluid axially
+    through a rotational unscrewing motion — generating thrust without sharp cutting edges.
+  </p>
+  <p>
+    This is potentially safer for aquatic life. Organisms that contact a spinning lobe rotor are pushed
+    aside rather than struck by a blade. VortexLobe builds directly on Robert's open-source design,
+    with his knowledge and permission.
+  </p>
+
+  <div class="about-grid">
+    <div class="card card-accent">
+      <h3>Robert Read's Original</h3>
+      <p>Rotor and tail cone designed in OpenSCAD. Tested in a hot tub using a cordless drill and a wooden shaft. No standalone motor. No way to run repeatable controlled tests.</p>
+    </div>
+    <div class="card card-orange">
+      <h3>VortexLobe's Addition</h3>
+      <p>A fully 3D printed motor mount designed from scratch — four iterations to get the fit right. Now the propeller runs hands-free on a 6V DC motor, enabling controlled thrust measurements at different voltages.</p>
+    </div>
+    <div class="card card-accent">
+      <h3>Why it matters</h3>
+      <p>Marine propeller strikes injure and kill wildlife every year. A lobe-based propulsor with no sharp blade edges is worth investigating as an alternative for low-speed applications.</p>
+    </div>
+    <div class="card card-orange">
+      <h3>Open source</h3>
+      <p>All files are licensed under AGPL v3, same as the original. Everything here — STLs, SCAD source, and this site — is free to use, modify, and build on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── BUILD GUIDE ── -->
+<section id="build">
+  <div class="eyebrow">Build Guide</div>
+  <h2>Assembling VortexLobe</h2>
+  <p>Three printed parts, one motor, hot glue, and a battery pack. Total cost is around $11.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h3>Print the three parts</h3>
+        <p>Print GentlePropulsionTop, GentlePropulsionTail, and motor_mount_v4 in PLA at 0.2mm layer height, 40% infill, 3 walls, no supports. Lay each flat side down on the bed. The rotor takes 2–3 hours, the tail cone about 45 minutes, and the mount about 20 minutes.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h3>Attach the motor mount to the rotor</h3>
+        <p>Push the motor mount up through the square portal hole on the flat base of the rotor until the square block sits flush with the surface. Hot glue around all edges where the block meets the rotor. Let cure fully before moving on.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h3>Insert the motor</h3>
+        <p>Slide the 6V DC motor into the round collar from below, shaft pointing up into the portal hole. Add a drop of super glue where the shaft tip meets inside the portal hole — this is what transfers spin from the shaft to the rotor.</p>
+        <div class="warn-box">Let the super glue cure completely before testing. If the bond breaks under load the rotor will spin free.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h3>Mount into the tail cone</h3>
+        <p>Drop the full assembly — rotor, mount, and motor — into the tail cone with the motor body hanging down inside. Hot glue around the collar where it contacts the cone inner wall. This stops the motor from rotating under torque.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-content">
+        <h3>Wire up and test</h3>
+        <p>Connect the two motor wires to a 4×AA battery pack. Swap the wires to reverse direction. Hold the tail cone firmly, connect power, and confirm the rotor spins cleanly. Then test in a bucket of water — tail pointing backward, rotor forward.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIMENT ── -->
+<section id="experiment">
+  <div class="eyebrow">Experiment</div>
+  <h2>Measuring thrust</h2>
+
+  <div class="hypothesis">
+    A hemispherical lobe rotor will generate measurable thrust in both water and air,
+    with thrust increasing as voltage increases.
+  </div>
+
+  <div class="experiment-grid">
+    <div>
+      <h3>Variables</h3>
+      <table class="var-table">
+        <thead>
+          <tr><th>Type</th><th>Variable</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Independent</td><td>Voltage (3V, 4.5V, 6V) and medium (water vs air)</td></tr>
+          <tr><td>Dependent</td><td>Thrust in grams</td></tr>
+          <tr><td>Controlled</td><td>Motor, rotor, distance, temperature</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Method</h3>
+      <p style="font-size:0.92rem;">Mount VortexLobe on a kitchen scale facing down. Connect motor to voltage source. Record thrust in grams at 3V, 4.5V, and 6V. Repeat in water and in air. Calculate efficiency using:</p>
+      <div class="formula">efficiency = thrust (g) / power (W)</div>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem;">
+    <h3 style="margin-bottom:0.8rem;">Results</h3>
+    <div class="card" style="color:var(--muted); font-size:0.92rem; font-style:italic;">
+      Results will be updated here after testing is complete.
+    </div>
+  </div>
+</section>
+
+<!-- ── FILES ── -->
+<section id="files">
+  <div class="eyebrow">Downloads</div>
+  <h2>All project files</h2>
+  <p>STL files are ready to print. SCAD files are fully parametric — open in OpenSCAD to modify dimensions.</p>
+
+  <div class="file-list">
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon stl">STL</span>
+        <div>
+          <div class="file-name">GentlePropulsionTop.stl</div>
+          <div class="file-desc">Main rotor with 4 hemispherical lobes — Robert Read's original design</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon stl">STL</span>
+        <div>
+          <div class="file-name">GentlePropulsionTail.stl</div>
+          <div class="file-desc">Tail cone housing — Robert Read's original design</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon stl" style="background:rgba(255,140,0,0.15);color:#FFB74D;">STL</span>
+        <div>
+          <div class="file-name">motor_mount_v4.stl</div>
+          <div class="file-desc">Motor mount hub — designed by Rayan, fits 130-size 6V DC motor</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon scad">SCAD</span>
+        <div>
+          <div class="file-name">GentlePropulsion_MotorMount.scad</div>
+          <div class="file-desc">Full assembly source — rotor, tail cone, and motor mount combined</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon scad">SCAD</span>
+        <div>
+          <div class="file-name">motor_mount_v4.scad</div>
+          <div class="file-desc">Motor mount source — adjust motor_r and wall to fit your motor</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+
+    <div class="file-row">
+      <div class="file-info">
+        <span class="file-icon md">MD</span>
+        <div>
+          <div class="file-name">README.md</div>
+          <div class="file-desc">Full project documentation for GitHub</div>
+        </div>
+      </div>
+      <span class="dl-btn">Download</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>VortexLobe — Science Fair Project, 2026</div>
+  <div>
+    Built on <a href="https://github.com/PubInv/unscrew-propeller" target="_blank">Gentle Propulsion</a>
+    by Robert L. Read &nbsp;·&nbsp;
+    <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank">AGPL v3</a>
+  </div>
+</footer>
+
+</body>
+</html>
